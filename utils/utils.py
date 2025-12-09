@@ -1,66 +1,74 @@
-import random
-import numpy as np
-import torch
 import os
-import wandb
-import pickle
+import torch
+import numpy as np
+import random
 
-def set_seed(seed):
+def is_rank0():
     """
-    Fixes seed for reproducibility.
+    Checks if the current process is rank 0 in a distributed setting.
+    """
+    return os.environ.get('RANK', '0') == '0'
+
+def set_seed(seed : int):
+    """
+    Sets the random seed for reproducibility.
     """
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = True
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
-def create_folder_if_not_exists(path : str):
+def load_marker_embedding_dict(embedding_dir : str):
     """
-    Creates a folder if it does not exist
+    Returns a dictionary mapping protein IDs to their index in the marker embedding matrix of `load_marker_embeddings`.
+    embedding_dir: directory containing marker embeddings in .pt format
     """
-    if not os.path.exists(path):
-        os.makedirs(path)
+    embedding_dict = {}
+    if not os.path.exists(embedding_dir):
+        raise ValueError(f"Could not find embedding_dir {embedding_dir}")
+    files = os.listdir(embedding_dir)
+    files = list(sorted(files))
+    index = 0
+    for file in files:
+        if file.endswith(".pt"):
+            protein_id = file.removesuffix(".pt")
+            embedding_dict[protein_id] = index
+            index += 1
+    return embedding_dict
 
-def save_config(conf):
+def load_marker_embeddings(embedding_dir : str):
     """
-    Saves the config file for a given checkpoint name as a pickeled dictionnary.
+    Loads all marker embeddings from the specified directory.
+    embedding_dir: directory containing marker embeddings in .pt format
+    Returns a tensor of shape (num_markers, embedding_dim)
     """
-    with open(f'{conf.experiment.dir}/{conf.experiment.name}/config.pkl', 'wb') as f:
-        pickle.dump(conf, f)
+    if not os.path.exists(embedding_dir):
+        raise ValueError(f"Could not find embedding_dir {embedding_dir}")
+    files = os.listdir(embedding_dir)
+    files = sorted(files)
+    embeddings = []
+    for file in files:
+        if file.endswith(".pt"):
+            embeddings.append(torch.load(os.path.join(embedding_dir, file), weights_only=True))
+    embeddings = torch.stack(embeddings, dim=0)
+    return embeddings
 
-
-def load_config(conf):
+def to_device(x, device):
     """
-    Loads a config file for given  name. If no file is found, returns an empty dictionary.
+    Moves tensor(s) to the specified device.
+    x: tensor or list/tuple of tensors
+    device: target device (e.g., 'cuda' or 'cpu')
     """
-    assert os.path.exists(f'{conf.experiment.dir}/{conf.experiment.name}/config.pkl'), f"No config file found for {conf.experiment.name}."
-
-    with open(f'{conf.experiment.dir}/{conf.experiment.name}/config.pkl', 'rb') as f:
-        config = pickle.load(f)
-    return config
-
-def setup_wandb_and_config(conf):
-    """
-    Sets up wandb and saves the config file.
-    """
-
-    assert conf.experiment.disable_wandb in ["online", "offline", "disabled"], f"Received {conf.experiment.disable_wandb} for disable_wandb. Must be one of ['online', 'offline', 'disabled']"
-
-    project = conf.experiment.wandb_project
-    if conf.training.resume:
-        with open(f'{conf.experiment.dir}/{conf.experiment.name}/config.pkl', 'rb') as f:
-            config = pickle.load(f)
-
-        assert config.experiment.wandb_run_id is not None, "No run_id found"
-        wandb.init(project=project, entity=conf.experiment.wandb_entity, mode=conf.experiment.disable_wandb, dir=f'{conf.experiment.dir}/{conf.experiment.name}/wandb', id=config.experiment.wandb_run_id, resume="must")
-
+    if isinstance(x, list):
+        return [to_device(i, device) for i in x]
+    if isinstance(x, tuple):
+        return [to_device(i, device) for i in x]
+    if x is None:
+        return None
     else:
-        wandb.init(name=conf.experiment.wandb_name, project=project, entity=conf.experiment.wandb_entity, mode=conf.experiment.disable_wandb, dir=f'{conf.experiment.dir}/{conf.experiment.name}/wandb')
-        if conf.experiment.disable_wandb == "disabled":
-            conf.experiment.wandb_run_id = "debug-run"
-        else:
-            conf.experiment.wandb_run_id = wandb.run.id
-        save_config(conf)
+        return x.to(device)
+    
 
-    return conf

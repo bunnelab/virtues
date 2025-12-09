@@ -1,3 +1,0 @@
-dataset:
-  name: hochschulz
-  filter_channels: ['B2M', 'CD134', 'CD15', 'CD163', 'CD3', 'CD31', 'CD38', 'CD68', 'CD8', 'CDH11', 'CK5', 'FAP', 'FSP1', 'H3', 'HLA-DR', 'MPO', 'PD-1', 'SMA', 'VIM', 'c-PARP']

@@ -1,90 +1,44 @@
-base:
-  dir: '.'
-  additional_config: null
+
+datasets_config: null # Path to dataset config file
+
+experiments_dir: null # Outputs will be written to {experiments_dir}/{experiment.name}/
+marker_embedding_dir: null # Directory containing marker embeddings as .pt files
 
 experiment:
-  name: null
-  dir: expt
-  log_dir: logs
-  checkpoint_dir: checkpoints
-  wandb_run_id: null
-  disable_wandb: online # Set to 'disable' to disable wandb
-  wandb_project: "VirTues"
-  wandb_name: null
-  wandb_entity: # Set to your wandb entity
+  name: null # Initialize with the name of the run
+  seed: 42
+  wandb_entity: null
+  wandb_project: null
+  wandb_mode: online # "online", "offline", or "disabled"
 
 training:
-  dropout: 0.0
-  resume: false
+  epochs: 100
   batch_size: 16
-  epochs: 1500
-  lr_base: 0.0001
-  lr_base_end: 0.000001
-  weight_decay: 0.04
-  weight_decay_end: 0.4
-  warmup_epochs: 10
-  fp16: true
-  predict_all: true
-  alpha_fft: 0.0
-  grad_accumulation: 8
-  seed: 42
-  eval_during_training: false
-  patch_eval_freq: 100
-  crop_eval_freq: 200
-  final_eval: true
+  fp16: True
+  bf16: False
   num_workers: 10
-  save_embeddings: true
-  clip_grad: 1.0
-  effective_batch_size: 128
+  gradient_accumulation_steps: 1
   lr: 0.0002
-  lr_end: 0.000002
-
-
-logistic:
-  balance_classes: balanced
+  lr_scheduler_type: cosine
+  weight_decay: 0.01
+  warmup_epochs: 10
+  disable_eval: false
 
 model:
-  dim: 512
+  patch_size: 8
+  model_dim: 512
   feedforward_dim: 1024
   encoder_pattern: hvhvhvhvhvhvhvhv
   num_encoder_heads: 8
-  num_decoder_heads: 8
-  num_decoder_hidden_layers: 0 
-  pos_emb: rope
-  backbone_size: base
   decoder_pattern: ffff
-  extra_patch_summary: true
-  use_only_patch_summary_for_decoder: true
+  num_decoder_heads: 8
+  num_decoder_hidden_layers: 0
+  positional_embedding_type: rope
+  dropout: 0.0
+  group_layers: False
+  norm_after_encoder_decoder: True
 
-
-dataset:
-  name: lung
-  path: /path/to/dataset
-  metadata_path: metadata/
-  preload: false
-  union_list: null
-  filter_channels: null
-
-esm:
-  name: esm2_t30_150M_UR50D
-  encoding_dir: /path/to/esm_embeddings
-
-image_info:
-  normalization: self_std
-  rnd_crop_size: 256
-  patch_size: 8
-  use_rnd_crop_dir: true
-  use_fraction_training: 1.0
-  image_section_size: [128, 128]
-  mask_ratio: [0.6, 1.0]
-  mask_strategy: uniform_independent
+data:
+  crop_size: 128
+  masking_ratio: [0.6, 1.0]
   channel_fraction: [0.75, 1.0]
-  num_global_crops: 1
-  stride: null
-
-downstream:
-  task_level: image
-  dir: downstream_expt
-  num_seeds: 5
-  epochs: 50
-  seed: 42

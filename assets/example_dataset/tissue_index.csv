@@ -1,0 +1,2 @@
+tissue_id,dataset,patient_id,specimen_id,he,imc,alignment,original_patient_identifier,he_mpp,imc_mpp,he_mpp_resized,width,height,original_file_name,split
+cords24_ocmzljpb_1,cords24,ocmzljpb,1,0,1,,175_170,,1.0,,597.0,697,"175_C4,9",test

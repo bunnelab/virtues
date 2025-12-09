@@ -12,6 +12,8 @@ test_scripts/
 imcdatasets/
 protein_encodings/
 
+assets/checkpoints/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

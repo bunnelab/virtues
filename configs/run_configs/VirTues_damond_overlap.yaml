@@ -1,3 +1,0 @@
-dataset:
-  name: damond
-  filter_channels: ['H3', 'SMA', 'CD38', 'CD44', 'CD68', 'MPO', 'CD20', 'CD3', 'CK19', 'CD45', 'FOXP3', 'CD45RA', 'CD8', 'CA9', 'Ki-67', 'H3', 'CD4', 'CD31', 'Rb', 'c-PARP']

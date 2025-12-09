@@ -1,11 +1,11 @@
 # VirTues
 ## AI-powered virtual tissues from spatial proteomics for clinical diagnostics and biomedical discovery
 
-*[[Preprint]](https://arxiv.org/pdf/2501.06039), [[Supplement]](https://nbviewer.org/github/bunnelab/virtues/blob/main/.github/supplement.pdf), 2025* <img src=".github/logo_virtues.png" alt="VirTues Logo" width="40%" align="right" />
+*[[Preprint]](https://arxiv.org/pdf/2501.06039), [[Supplement]](https://nbviewer.org/github/bunnelab/virtues/blob/main/.github/supplement.pdf), [[Model]](https://huggingface.co/bunnelab/virtues), 2025* <img src=".github/logo_virtues.png" alt="VirTues Logo" width="40%" align="right" />
 
-**Authors:** Johann Wenckstern*, Eeshaan Jain*, Kiril Vasilev, Matteo Pariset, Andreas Wicki, Gabriele Gut, Charlotte Bunne
+**Authors:** Johann Wenckstern*, Eeshaan Jain*, Yexiang Cheng*, Benedikt von Querfurth, Kiril Vasilev, Matteo Pariset, Phil F. Cheng, Petros Liakopoulos, Olivier Michielin, Andreas Wicki, Gabriele Gut, Charlotte Bunne
 
-Spatial proteomics technologies have transformed our understanding of complex tissue architectures by enabling simultaneous analysis of multiple molecular markers and their spatial organization. The high dimensionality of these data, varying marker combinations across experiments and heterogeneous study designs pose unique challenges for computational analysis. Here, we present Virtual Tissues (VirTues), a foundation model framework for biological tissues that operates across the molecular, cellular and tissue scale. VirTues introduces innovations in transformer architecture design, including a novel tokenization scheme that captures both spatial and marker dimensions and attention mechanisms that scale to high-dimensional multiplex data while maintaining interpretability. Trained on diverse cancer and non-cancer tissue datasets, VirTues demonstrates strong generalization capabilities without task-specific fine-tuning, enabling cross-study analysis and novel marker integration. As a generalist model, VirTues outperforms existing approaches across clinical diagnostics, biological discovery and patient case retrieval tasks, while providing insights into tissue function and disease mechanisms.
+Spatial proteomics technologies have transformed our understanding of complex tissue architecture in cancer but present unique challenges for computational analysis. Each study uses a different marker panel and protocol, and most methods are tailored to single cohorts, which limits knowledge transfer and robust biomarker discovery. Here we present Virtual Tissues (VirTues), a general-purpose foundation model for spatial proteomics that learns marker-aware, multi-scale representations of proteins, cells, niches and tissues directly from multiplex imaging data. From a single pretrained backbone, VirTues supports marker reconstruction, cell typing and niche annotation, spatial biomarker discovery, and patient stratification, including zero-shot annotation across heterogeneous panels and datasets. In triple-negative breast cancer, VirTues-derived biomarkers predict anti-PD-L1 chemo-immunotherapy response and stratify disease-free survival in an independent cohort, outperforming state-of-the-art biomarkers derived from the same datasets and current clinical stratification schemes. 
 
 <br>
 <p align='center'>
@@ -24,71 +24,82 @@ source setup.sh
 Before running VirTues, please ensure that your base configuration found in `configs/base_config` is properly setup for your system. 
 This includes setting the following fields:
 ```yaml
-experiment.disable_wandb: 'disabled' | 'online' | 'offline' # set to 'disabled' to disable wandb logging
+experiments_dir: <path-to-dir> # path of directory to save all training runs
+
+experiment.name: <run-name> # the name of your training run
+experiment.wandb_mode: 'disabled' | 'online' | 'offline' # set to 'disabled' to disable wandb logging
 experiment.wandb_entity: <entity-name> # your wandb entity name, leave empty for default
 experiment.wandb_project: <project-name> # your project name
-dataset.path: /path/to/dataset # directory containing individual dataset folders
-esm.encoding_dir: /path/to/esm_embeddings # directory containing protein embeddings as [UNIPROT-ID].pt files
+
+datasets_config: <path-to-config> # path to config file describing training datasets
+
+marker_embedding_dir: <path-to-dir> # path of directory containing marker embeddings saved as [UniprotID].pt files
 ```
+Alternatively, you can set these fields from the command line when starting the training.
 
-### Datasets 
-Datasets used in the paper will be made available upon publication.
-
-To setup a new dataset, we recommend following our file structure:
+### Datasets
+We provide a simple class `MultiplexDataset` to load datasets of multiplexed images. 
+To setup a new dataset for this interface, we recommend following our file structure:
 ```z
-dataset.path/
-├──[CUSTOM]/
-│   ├──images/ # multiplexed images without processing, names must match 'image_name' columns in annotations
-│   │  ├──A0001.npy
-│   │  ├──A0002.npy
+path/to/datasets/folder/
+├──[custom]/
+│   ├──images/ # multiplexed images without processing, names must match 'tissue_id' column in tissue_index.csv
+│   │  ├──[tissue_id].npy
+│   │  ├──[tissue_id].npy
 │   │  ├──...
-│   ├──masks/ # cell segmentations masks, names must match 'image_name' columns in annotations
-│   │  ├──A0001.npy
-│   │  ├──A0002.npy
+│   ├──crops/ # precomputed image crops for training without preprocessing, names must match 'tissue_id' and 'crop_id' column in crop_index.csv
+│   │  ├──[tissue_id]_[crop_id].npy
+│   │  ├──[tissue_id]_[crop_id].npy
 │   │  ├──...
-│   ├──clinical.csv # image-wise annotations, must contain column 'image_name'
-│   ├──sce_annotations.csv # cell-wise annotations, must contain columns 'image_name' and 'cell_id'
-...
+│   ├──masks/ # cell segmentations masks, names must match 'tissue_id' column in tissue_index.csv
+│   │  ├──[tissue_id].npy
+│   │  ├──[tissue_id].npy
+│   │  ├──...
+│   ├──tissue_index.csv # tissue-wise annotations, must contain column 'tissue_id' and 'split'
+│   ├──crop_index.csv # crop-wise annotations, must contain column 'tissue_id' and 'crop_id'
+│   ├──channels.csv # list of markers and corresponding UniprotIDs measured by each channel, order must match images and crops 
+│   ├──means.csv # channel-wise means for each tissue used for standardization during preprocessing, index must match 'tissue_id'
+│   ├──stds.csv # channel-wise standard deviations for each tissue used for standardization during preprocessing, index must match 'tissue_id'
+│   ├──quantiles.csv # channel-wise quantiles for each tissue used for clipping during preprocessing, index must match 'tissue_id'
+│   ├──sce_annotations.csv # (not required for training) cell-wise annotations, must contain columns 'tissue_id' and 'cell_id' 
 ```
-Further protein embeddings need to be added to `esm.encoding_dir` and a table `gene_dict_[CUSTOM].csv` containing for each  channel (in the correct order of measurement) a name and a UniProt ID needs to be added to `./metadata/[CUSTOM]/`.
+
+After setting up all datasets, you need to configure a .yaml file that specifies the paths to each dataset.
+For orientation and demonstration purposes, we provide an example dataset containing a single tissue in assets/example_dataset, along with corresponding configuration files located at `configs/datasets/example_config.yaml` and `configs/datasets/example_config_multiple_datasets.yaml`.
+
+Finally, for every measured marker across all datasets, a marker embedding must be precomputed using ESM-2 and stored in `marker_embedding_dir` following the naming convention `[UniprotID].pt`.
 
 ### Training 
-After setting up the datasets, VirTues can be pretrained via the `src/train_virtues.py` script. For example, to train an instance of VirTues on the Danenberg et al. dataset run: 
+After setting up the datasets, VirTues can be pretrained via the `train.py` script. For example, to train an instance of VirTues with a custom dataset config run:
 ```bash
-python -m src.train_virtues experiment.name=[NAME] --dataset.name=danenberg
+python -m train experiment.name=[NAME] datasets_config=[PATH]
 ```
 
-VirTues can also be pretrained on multiple datasets at once. For instance, the following command executes training on Danenberg et al. and Jackson et al.:
+The training script also supports distributed training. For this we recommend using torchrun. For example, to train on a single node with 4 GPUs run:
 ```bash
-python -m src.train_virtues experiment.name=[NAME] --dataset.union_list=[danenberg,jacksonfischer]
-```
-All the training results are stored in the `expt/` directory.
-
-### Evaluation
-Once VirTues has been pretrained, with `experiment.name` as [NAME], it will be stored in `expt/[NAME]`. To run downstream task on a dataset, run 
-```bash
-python -m src.train_downstream experiment.name=[NAME] dataset.name=danenberg downstream.task_level=image
-```
-The above will run all image level downstream tasks sequentially on the danenberg dataset. Tasks can be image level (tissue), crop level (niche) or patch level (cellular). Image and crop level tasks use ABMIL, while patch level tasks use linear probing.
-
-The datasets have the following tasks:
-```
-lung: image | patch
-danenberg: image | crop | patch
-jacksonfischer: image
-hochschulz: image | patch
-damond: image | patch
+torchrun --standalone --nnodes=1 --nproc_per_node=4 -m train experiment.name=[NAME] datasets_config=[PATH]
 ```
 
-All the downstream evaluation results are stored in the `downstream_expt/` directory.
+All training results are stored in the `experiments_dir/experiment.name` directory.
 
+### Inference
 
-## Acknowledgements
-The project was built on top of amazing repositories such as [PyTorch](https://github.com/pytorch/pytorch) (v2.5.1, CUDA 12.1), [xformers](https://github.com/facebookresearch/xformers) (v0.0.28) and [scikit-learn](https://github.com/scikit-learn/scikit-learn) (v1.5.2). We thank the authors and developers for their contribution.
+#### Pretrained Weigths
+As an alternative to training a VirTues model from scratch, we also provide pretrained weights via [Hugging Face Hub](https://huggingface.co/bunnelab/virtues). For instructions, how to download and load these, please refer to the Demo notebooks below.
+
+#### Demos
+
+To help you get started with using a trained VirTues model for downstream analyses, the `notebooks` folder includes demonstrations of several common use cases:
+
+-  `1_demo_reconstruction.ipynb` – Shows how to use VirTues to reconstruct partially masked channels or inpaint fully masked ones.
+- `2_demo_cell_phenotyping.ipynb`  – Demonstrates how to compute cell tokens with VirTues, which can be used for applications such as cell phenotyping and virtual biomarker discovery.
 
 ## License and Terms of Use
 
-ⓒ AIMM Lab. This model and associated code are released under the [CC-BY-NC-ND 4.0]((https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en)) license and may only be used for non-commercial, academic research purposes with proper attribution. Any commercial use, sale, or other monetization of the VirTues platform and its derivatives, which include models trained on outputs from the VirTues platform, is prohibited and requires prior approval.
+Copyright (c) ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE, Switzerland,
+Laboratory of Artificial Intelligence in Molecular Medicine, 2025
+
+This model and associated code are released under the MIT Licence. See `LICENSE.md` for details. 
 
 ## Reference
 If you find our work useful in your research or if you use parts of this code please consider citing our [paper](https://arxiv.org/abs/2501.06039):

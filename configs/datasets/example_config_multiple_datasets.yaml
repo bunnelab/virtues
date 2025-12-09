@@ -1,0 +1,21 @@
+datasets:
+  example_dataset_1:
+    tissue_dir: assets/example_dataset/images
+    crop_dir: assets/example_dataset/crops
+    mask_dir: assets/example_dataset/masks
+    tissue_index: assets/example_dataset/tissue_index.csv
+    crop_index: assets/example_dataset/crop_index.csv
+    channels_file: assets/example_dataset/channels.csv
+    quantiles_file: assets/example_dataset/quantiles.csv
+    means_file: assets/example_dataset/means.csv
+    stds_file: assets/example_dataset/stds.csv
+  example_dataset_2: # Identical to example_dataset_1 for demonstration
+    tissue_dir: assets/example_dataset/images
+    crop_dir: assets/example_dataset/crops
+    mask_dir: assets/example_dataset/masks
+    tissue_index: assets/example_dataset/tissue_index.csv
+    crop_index: assets/example_dataset/crop_index.csv
+    channels_file: assets/example_dataset/channels.csv
+    quantiles_file: assets/example_dataset/quantiles.csv
+    means_file: assets/example_dataset/means.csv
+    stds_file: assets/example_dataset/stds.csv
