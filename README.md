@@ -65,7 +65,7 @@ path/to/datasets/folder/
 ```
 
 After setting up all datasets, you need to configure a .yaml file that specifies the paths to each dataset.
-For orientation and demonstration purposes, we provide an example dataset containing a single tissue in assets/example_dataset, along with corresponding configuration files located at `configs/datasets/example_config.yaml` and `configs/datasets/example_config_multiple_datasets.yaml`.
+For orientation and demonstration purposes, we provide an example dataset containing a single tissue in `assets/example_dataset`, along with corresponding configuration files located at `configs/datasets/example_config.yaml` and `configs/datasets/example_config_multiple_datasets.yaml`.
 
 Finally, for every measured marker across all datasets, a marker embedding must be precomputed using ESM-2 and stored in `marker_embedding_dir` following the naming convention `[UniprotID].pt`.
 
