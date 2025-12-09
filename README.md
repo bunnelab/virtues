@@ -89,7 +89,7 @@ As an alternative to training a VirTues model from scratch, we also provide pret
 
 #### Demos
 
-To help you get started with using a trained VirTues model for downstream analyses, the `notebooks` folder includes demonstrations of several common use cases:
+To help you start using a trained VirTues model for downstream analyses, the `notebooks` folder includes demonstrations of several common use cases:
 
 -  `1_demo_reconstruction.ipynb` – Shows how to use VirTues to reconstruct partially masked channels or inpaint fully masked ones.
 - `2_demo_cell_phenotyping.ipynb`  – Demonstrates how to compute cell tokens with VirTues, which can be used for applications such as cell phenotyping and virtual biomarker discovery.
