@@ -1,7 +1,7 @@
 # VirTues
 ## AI-powered virtual tissues from spatial proteomics for clinical diagnostics and biomedical discovery
 
-*[[Preprint]](https://arxiv.org/pdf/2501.06039), [[Supplement]](https://nbviewer.org/github/bunnelab/virtues/blob/main/.github/supplement.pdf), [[Model]](https://huggingface.co/bunnelab/virtues), 2025* <img src=".github/logo_virtues.png" alt="VirTues Logo" width="40%" align="right" />
+*[[Preprint]](https://arxiv.org/pdf/2501.06039), [[Supplement]](https://github.com/bunnelab/virtues/blob/main/.github/supplement.pdf), [[Model]](https://huggingface.co/bunnelab/virtues), 2025* <img src=".github/logo_virtues.png" alt="VirTues Logo" width="40%" align="right" />
 
 **Authors:** Johann Wenckstern*, Eeshaan Jain*, Yexiang Cheng*, Benedikt von Querfurth, Kiril Vasilev, Matteo Pariset, Phil F. Cheng, Petros Liakopoulos, Olivier Michielin, Andreas Wicki, Gabriele Gut, Charlotte Bunne
 
