@@ -107,7 +107,7 @@ If you find our work useful in your research or if you use parts of this code pl
 ```
 @article{wenckstern2025ai,
   title={{AI-powered virtual tissues from spatial proteomics for clinical diagnostics and biomedical discovery}},
-  author={Wenckstern, Johann and Jain, Eeshaan and Vasilev, Kiril and Pariset, Matteo and Wicki, Andreas and Gut, Gabriele and Bunne, Charlotte},
+  author={Wenckstern, Johann and Jain, Eeshaan and Cheng, Yexiang and von Querfurth, Benedikt and Vasilev, Kiril and Pariset, Matteo and Cheng, Phil F. and Liakopoulos, Petros and Michielin, Olivier and Wicki, Andreas and Gut, Gabriele and Bunne, Charlotte},
   journal={arXiv preprint arXiv:2501.06039},
   year={2025},
   url={https://arxiv.org/abs/2501.06039}, 
