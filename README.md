@@ -75,7 +75,7 @@ python -m utils.download_fastas --output_dir [PATH] --csv [CSV-FILE]
 ```
 To generate ESM-2 embeddings of these sequences, you can use the script `utils/compute_esm_embeddings.py` via:
 ```
-python -m utils.download_fastas --input_dir [PATH1] --output_dir [PATH2] --device [cpu/cuda] --model [MODEL]
+python -m utils.compute_esm_embeddings --input_dir [PATH1] --output_dir [PATH2] --device [cpu/cuda] --model [MODEL]
 ```
 Resulting embedings will be saved at `[PATH2]/[MODEL]/[UniportID].pt`. The official published weights of VirTues were trained with the ESM-2 model `esm2_t30_150M_UR50D` (set as default). For very long protein sequences, video memory requirements might be high. In this case, we recommend running the script using `--device cpu` and sufficient RAM.
 
