@@ -69,7 +69,7 @@ For orientation and demonstration purposes, we provide an example dataset contai
 
 Finally, for every measured marker across all datasets, a marker embedding must be precomputed using ESM-2 and stored in `marker_embedding_dir` following the naming convention `[UniprotID].pt`.
 To faciliate this step, we provide two utility scritps.\
-You can automatically download FASTA files containing the canonical aminoacid sequence from Uniprot with the script `utils/download_fastas.py` by specifying a `.csv` file with column `protein_id` containing the Uniprot IDs (including potential isoform suffixes). For this run: 
+You can automatically download FASTA files containing the canonical amino acid sequence from Uniprot with the script `utils/download_fastas.py` by specifying a `.csv` file with column `protein_id` containing the Uniprot IDs (including potential isoform suffixes). For this run: 
 ```
 python -m utils.download_fastas --output_dir [PATH] --csv [CSV-FILE]
 ```
