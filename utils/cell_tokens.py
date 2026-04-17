@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+from typing import List, Tuple
 
 from modules.multiplex_virtues import MultiplexVirtues
 
@@ -56,7 +57,7 @@ def compute_cell_tokens(model : MultiplexVirtues,
                         crop_size=128, 
                         patch_size=8, 
                         stride=42, 
-                        chunk_size=32) -> torch.Tensor: 
+                        chunk_size=32) -> Tuple[List[int], torch.Tensor, List[torch.Tensor], List[Tuple[int, int]]]: 
     '''
     Compute cell tokens
     Args:
@@ -72,6 +73,8 @@ def compute_cell_tokens(model : MultiplexVirtues,
     Returns:
         cell_ids: list of cell ids
         cell_tokens: tensor of shape (num_cells, token_dim)
+        crop_tokens: list of tensors of patch summary tokens for each crop
+        indices: list of (row, col) indices for each crop
     '''
     crops, indices = _get_uniform_crops(img, stride, crop_size=crop_size)
     crops = [crops.to(device) for crops in crops]
