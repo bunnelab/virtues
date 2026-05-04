@@ -1,0 +1,7 @@
+datasets:
+  hoch2022multiplexed:
+    name: hoch2022multiplexed
+    path: /mnt/aimm/scratch/datasets_v2/hoch2022multiplexed
+    modality: imc
+    standardization: quantile_clipping_log1p/uq_0.99
+    resolution: 1.0

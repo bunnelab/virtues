@@ -33,7 +33,7 @@ experiment.wandb_project: <project-name> # your project name
 
 datasets_config: <path-to-config> # path to config file describing training datasets
 
-marker_embedding_dir: <path-to-dir> # path of directory containing marker embeddings saved as [UniprotID].pt files
+marker_embeddings_dir: <path-to-dir> # path of directory containing marker embeddings saved as [UniprotID].pt files
 ```
 Alternatively, you can set these fields from the command line when starting the training.
 
@@ -67,27 +67,27 @@ path/to/datasets/folder/
 After setting up all datasets, you need to configure a .yaml file that specifies the paths to each dataset.
 For orientation and demonstration purposes, we provide an example dataset containing a single tissue in `assets/example_dataset`, along with corresponding configuration files located at `configs/datasets/example_config.yaml` and `configs/datasets/example_config_multiple_datasets.yaml`.
 
-Finally, for every measured marker across all datasets, a marker embedding must be precomputed using ESM-2 and stored in `marker_embedding_dir` following the naming convention `[UniprotID].pt`.
+Finally, for every measured marker across all datasets, a marker embedding must be precomputed using ESM-2 and stored in `marker_embeddings_dir` following the naming convention `[UniprotID].pt`.
 To faciliate this step, we provide two utility scritps.\
 You can automatically download FASTA files containing the canonical amino acid sequence from Uniprot with the script `utils/download_fastas.py` by specifying a `.csv` file with column `protein_id` containing the Uniprot IDs (including potential isoform suffixes). For this run: 
 ```
-python -m utils.download_fastas --output_dir [PATH] --csv [CSV-FILE]
+python -m virtues.utils.download_fastas --output_dir [PATH] --csv [CSV-FILE]
 ```
-To generate ESM-2 embeddings of these sequences, you can use the script `utils/compute_esm_embeddings.py` via:
+To generate ESM-2 embeddings of these sequences, you can use the script `virtues/utils/compute_esm_embeddings.py` via:
 ```
-python -m utils.compute_esm_embeddings --input_dir [PATH1] --output_dir [PATH2] --device [cpu/cuda] --model [MODEL]
+python -m virtues.utils.compute_esm_embeddings --input_dir [PATH1] --output_dir [PATH2] --device [cpu/cuda] --model [MODEL]
 ```
 Resulting embedings will be saved at `[PATH2]/[MODEL]/[UniportID].pt`. The official published weights of VirTues were trained with the ESM-2 model `esm2_t30_150M_UR50D` (set as default). For very long protein sequences, video memory requirements might be high. In this case, we recommend running the script using `--device cpu` and sufficient RAM.
 
 ### Training 
-After setting up the datasets, VirTues can be pretrained via the `train.py` script. For example, to train an instance of VirTues with a custom dataset config run:
+After setting up the datasets, VirTues can be pretrained via the `virtues/train.py` script. For example, to train an instance of VirTues with a custom dataset config run:
 ```bash
-python -m train experiment.name=[NAME] datasets_config=[PATH]
+python -m virtues.train experiment.name=[NAME] datasets_config=[PATH]
 ```
 
 The training script also supports distributed training. For this we recommend using torchrun. For example, to train on a single node with 4 GPUs run:
 ```bash
-torchrun --standalone --nnodes=1 --nproc_per_node=4 -m train experiment.name=[NAME] datasets_config=[PATH]
+torchrun --standalone --nnodes=1 --nproc_per_node=4 -m virtues.train experiment.name=[NAME] datasets_config=[PATH]
 ```
 
 All training results are stored in the `experiments_dir/experiment.name` directory.

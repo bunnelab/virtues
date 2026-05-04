@@ -1,4 +1,4 @@
-from modules.layers.cache import LRUCache
+from virtues.modules.layers.cache import LRUCache
 import torch
 from typing import Optional, Tuple, List, Union
 

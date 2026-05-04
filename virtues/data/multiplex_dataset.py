@@ -4,9 +4,9 @@ import random
 import pandas as pd
 from torch.utils.data import Dataset
 from torchvision.transforms import v2
-from datasets.augmentations import MultiplexRandomCrop, MultiplexRandomSymmetry, ChannelDropout
-from utils.utils import load_marker_embedding_dict
-from utils.masking import generate_mask
+from virtues.data.augmentations import MultiplexRandomCrop, MultiplexRandomSymmetry, ChannelDropout
+from virtues.utils.utils import load_marker_embedding_dict
+from virtues.utils.masking import generate_mask
 from typing import Tuple
 import math
 
@@ -23,9 +23,9 @@ class MultiplexDataset(Dataset):
             quantiles_file : str,
             means_file : str,
             stds_file : str,
-            marker_embedding_dir : str,
+            marker_embeddings_dir : str,
             split : str = 'all',
-            crop_size : int = 128,
+            tile_size : int = 128,
             patch_size : int = 8,
             masking_ratio : Tuple[float, float] = (0.6, 1.0),
             channel_fraction : Tuple[float, float] = (0.75, 1.0),
@@ -40,7 +40,7 @@ class MultiplexDataset(Dataset):
         means_file: path to csv file containing per-channel mean values for normalization
         stds_file: path to csv file containing per-channel std values for normalization
         split: split to use (train, test, all)
-        crop_size: size of the training crops
+        tile_size: size of the training crops
         patch_size: size of the patches for masking
         masking_ratio: tuple indicating the range of masking ratios from which per-sample masking ratio is drawn uniformly
         channel_fraction: tuple indicating the range of channel fractions from which per-sample fraction for channel dropout is drawn uniformly
@@ -61,7 +61,7 @@ class MultiplexDataset(Dataset):
 
         self.channel_mask = [] 
         self.marker_indices = [] 
-        marker_embedding_dict = load_marker_embedding_dict(marker_embedding_dir)
+        marker_embedding_dict = load_marker_embedding_dict(marker_embeddings_dir)
         for i, row in self.channels.iterrows():
             protein_id = row['protein_id']
             if protein_id in marker_embedding_dict:
@@ -78,11 +78,11 @@ class MultiplexDataset(Dataset):
             self.tissue_index = self.tissue_index.query(f'split == "{split}"')
             self.crop_index = self.crop_index[self.crop_index['tissue_id'].isin(self.tissue_index['tissue_id'])]
 
-        self.crop_size = crop_size
+        self.tile_size = tile_size
         self.patch_size = patch_size
         self.masking_ratio = masking_ratio
 
-        self.random_crop = MultiplexRandomCrop(size=(crop_size, crop_size))
+        self.random_crop = MultiplexRandomCrop(size=(tile_size, tile_size))
         self.random_symmetry = MultiplexRandomSymmetry()
         self.gaussian_blur = v2.GaussianBlur(kernel_size=3, sigma=(1.0))
         self.drop_channels = ChannelDropout(channel_fraction=channel_fraction)
@@ -103,7 +103,7 @@ class MultiplexDataset(Dataset):
         multiplex, marker_indices = self._augment(multiplex, marker_indices)
     
         C = multiplex.shape[0]
-        H = W = self.crop_size // self.patch_size
+        H = W = self.tile_size // self.patch_size
         mask = generate_mask(C, H, W, self.masking_ratio)
 
         return multiplex, marker_indices, mask

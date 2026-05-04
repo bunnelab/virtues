@@ -1,15 +1,15 @@
 
-datasets_config: null # Path to dataset config file
+datasets_config: configs/spora_datasets/example_config.yaml # Path to dataset config file
 
-experiments_dir: null # Outputs will be written to {experiments_dir}/{experiment.name}/
-marker_embeddings_dir: null # Directory containing marker embeddings as .pt files
+experiments_dir: /mnt/aimm/scratch/shr/mmvirtues/outputs # Outputs will be written to {experiments_dir}/{experiment.name}/
+marker_embeddings_dir: /mnt/aimm/scratch/datasets_v2/marker_embeddings/esm2_t30_150M_UR50D # Directory containing marker embeddings as .pt files
 
 experiment:
-  name: null # Initialize with the name of the run
+  name: testrun # Initialize with the name of the run
   seed: 42
   wandb_entity: null
   wandb_project: null
-  wandb_mode: online # "online", "offline", or "disabled"
+  wandb_mode: disabled # "online", "offline", or "disabled"
 
 training:
   epochs: 100

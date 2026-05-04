@@ -2,28 +2,28 @@ import numpy as np
 import torch
 from typing import List, Tuple
 
-from modules.multiplex_virtues import MultiplexVirtues
+from virtues.modules.multiplex_virtues import MultiplexVirtues
 
 
-def _get_uniform_crops(img, stride, crop_size=128):
+def _get_uniform_crops(img, stride, tile_size=128):
     crops = []
   
     h, w = img.shape[-2:]
     indices_set = set()
-    for i in range(0, h - crop_size + 1, stride):
-        for j in range(0, w - crop_size + 1, stride):
+    for i in range(0, h - tile_size + 1, stride):
+        for j in range(0, w - tile_size + 1, stride):
             indices_set.add((i, j))
     
-    last_i = h - crop_size
-    for j in range(0, w - crop_size + 1, stride):
+    last_i = h - tile_size
+    for j in range(0, w - tile_size + 1, stride):
         indices_set.add((last_i, j))
-    last_j = w - crop_size
-    for i in range(0, h - crop_size + 1, stride):
+    last_j = w - tile_size
+    for i in range(0, h - tile_size + 1, stride):
         indices_set.add((i, last_j))
     indices_set.add((last_i, last_j))
     indices = sorted(list(indices_set))
     for i, j in indices:
-        crop = img[:, i:i+crop_size, j:j+crop_size]
+        crop = img[:, i:i+tile_size, j:j+tile_size]
         crops.append(crop)
     # turn the indices back to the original coordinates
     for i in range(len(indices)):
@@ -54,10 +54,10 @@ def compute_cell_tokens(model : MultiplexVirtues,
                         channel : torch.Tensor, 
                         segmentation_mask: torch.Tensor, 
                         device='cuda',
-                        crop_size=128, 
+                        tile_size=128, 
                         patch_size=8, 
                         stride=42, 
-                        chunk_size=32) -> Tuple[List[int], torch.Tensor, List[torch.Tensor], List[Tuple[int, int]]]: 
+                        chunk_size=32) -> Tuple[torch.Tensor, torch.Tensor, List[torch.Tensor], List[Tuple[int, int]]]: 
     '''
     Compute cell tokens
     Args:
@@ -66,17 +66,17 @@ def compute_cell_tokens(model : MultiplexVirtues,
         channel: channel tensor of shape (C,)
         segmentation_mask: cell segmentation mask of shape (H, W)
         device: device to run the model on
-        crop_size: size of the crops to extract
+        tile_size: size of the crops to extract
         patch_size: size of the patches in the model
         stride: stride for extracting crops
         chunk_size: number of crops to process in a chunk
     Returns:
-        cell_ids: list of cell ids
+        cell_ids: tensor of shape (num_cells,)
         cell_tokens: tensor of shape (num_cells, token_dim)
         crop_tokens: list of tensors of patch summary tokens for each crop
         indices: list of (row, col) indices for each crop
     '''
-    crops, indices = _get_uniform_crops(img, stride, crop_size=crop_size)
+    crops, indices = _get_uniform_crops(img, stride, tile_size=tile_size)
     crops = [crops.to(device) for crops in crops]
     channel = channel.to(device)
         
@@ -99,7 +99,7 @@ def compute_cell_tokens(model : MultiplexVirtues,
     weights = {}
 
     for crop_token, (row, col) in zip(crop_tokens, indices):
-        crop_mask = segmentation_mask[row:row + crop_size, col:col + crop_size]
+        crop_mask = segmentation_mask[row:row + tile_size, col:col + tile_size]
         crop_cell_tokens, crop_weights = _assign_patch_tokens_to_cells(crop_token, crop_mask, patch_size)
         for cell_id, tokens in crop_cell_tokens.items():
             if cell_id not in cell_tokens:
@@ -119,5 +119,11 @@ def compute_cell_tokens(model : MultiplexVirtues,
         avg_cell_tokens[cell_id] = avg_cell_token
     cell_ids = list(avg_cell_tokens.keys())
     cell_ids.sort()
+    
     cell_tokens = torch.stack([avg_cell_tokens[cell_id] for cell_id in cell_ids])
+    cell_ids = torch.tensor(cell_ids, dtype=torch.long)
+
+    cell_tokens = cell_tokens.cpu()
+    cell_ids = cell_ids.cpu()
+
     return cell_ids, cell_tokens, crop_tokens, indices

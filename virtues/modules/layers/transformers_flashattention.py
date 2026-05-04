@@ -6,9 +6,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
 
-from modules.layers.attention_flashattention import MHAwithPosEmb
-from modules.layers.basic_modules import build_feedforward
-from modules.layers.mask_utils_flashattention import (
+from virtues.modules.layers.attention_flashattention import MHAwithPosEmb
+from virtues.modules.layers.basic_modules import build_feedforward
+from virtues.modules.layers.mask_utils_flashattention import (
     build_self_attention_bias,
     build_self_attention_bias_channel_concat,
     get_non_zero_indices,

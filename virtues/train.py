@@ -1,12 +1,14 @@
 import os
 from omegaconf import OmegaConf
 from transformers import Trainer, TrainingArguments
-from utils.utils import is_rank0, set_seed, load_marker_embeddings, to_device
-from modules.multiplex_virtues import MultiplexVirtues
-from datasets.multiplex_dataset import MultiplexDataset
+from virtues.utils.utils import is_rank0, set_seed, load_marker_embeddings, to_device
+from virtues.modules.multiplex_virtues import MultiplexVirtues
+from virtues.data.multiplex_dataset import MultiplexDataset
+from virtues.data.virtues_dataset import VirTuesPretrainingDataset
 import torch
 from torch.utils.data import ConcatDataset, Dataset
 import wandb
+from spora_io import MultiplexImagingDataset
 
 class VirTuesTrainer(Trainer):
 
@@ -71,26 +73,29 @@ def build_datasets(conf, split: str) -> Dataset:
     datasets = []
     for name in conf.datasets.keys():
         ds_conf = conf.datasets[name]
-        dataset = MultiplexDataset(
-            tissue_dir=ds_conf.tissue_dir,
-            crop_dir=ds_conf.crop_dir,
-            mask_dir=ds_conf.mask_dir,
-            tissue_index=ds_conf.tissue_index,
-            crop_index=ds_conf.crop_index,
-            channels_file=ds_conf.channels_file,
-            quantiles_file=ds_conf.quantiles_file,
-            means_file=ds_conf.means_file,
-            stds_file=ds_conf.stds_file,
-            marker_embedding_dir=conf.marker_embedding_dir,
+
+        multiplex_dataset = MultiplexImagingDataset(
+            name=ds_conf.name,
+            path=ds_conf.path,
+            modality=ds_conf.modality,
+            standardization=ds_conf.standardization,
+            resolution=ds_conf.resolution,
+            tile_size=conf.data.tile_size,
+            disable_quantile_mask=False,
+            filter_list=['gaussian_blur',],
+            use_mean_std=True,
+        )
+
+        virtues_dataset = VirTuesPretrainingDataset(
+            multiplex_dataset=multiplex_dataset,
+            marker_embeddings_dir=conf.marker_embeddings_dir,
             split=split,
-            crop_size=conf.data.crop_size,
             patch_size=conf.model.patch_size,
             masking_ratio=conf.data.masking_ratio,
             channel_fraction=conf.data.channel_fraction,
         )
-        datasets.append(dataset)
+        datasets.append(virtues_dataset)
     return ConcatDataset(datasets)
-
 
 def train_virtues(conf):
     """
@@ -105,7 +110,7 @@ def train_virtues(conf):
         multiplex_mask = [sample[2] for sample in batch]
         return multiplex, channel_ids, multiplex_mask
 
-    marker_embeddings = load_marker_embeddings(conf.marker_embedding_dir)
+    marker_embeddings = load_marker_embeddings(conf.marker_embeddings_dir)
 
     model = MultiplexVirtues(
         use_default_config = False,
@@ -167,7 +172,7 @@ def train_virtues(conf):
 
 
 if __name__ == "__main__":
-    conf = OmegaConf.load("configs/base_config.yaml")
+    conf = OmegaConf.load("configs/test_config.yaml")
     cli_conf = OmegaConf.from_cli()
     if hasattr(cli_conf, 'datasets_config') and cli_conf.datasets_config is not None:
         dataset_conf = OmegaConf.load(cli_conf.datasets_config)
@@ -179,7 +184,7 @@ if __name__ == "__main__":
     conf = OmegaConf.merge(conf, cli_conf)
 
     if is_rank0():
-        print("OmegaConf merged config:")
+        print("Merged config:")
         print(OmegaConf.to_yaml(conf))
 
     os.makedirs(os.path.join(conf.experiments_dir, conf.experiment.name), exist_ok=True)
