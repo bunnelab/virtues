@@ -3,7 +3,7 @@ from omegaconf import OmegaConf
 from transformers import Trainer, TrainingArguments
 from virtues.utils.utils import is_rank0, set_seed, load_marker_embeddings, to_device
 from virtues.modules.multiplex_virtues import MultiplexVirtues
-from virtues.datasets.multiplex_dataset import MultiplexDataset
+from virtues.data.multiplex_dataset import MultiplexDataset
 import torch
 from torch.utils.data import ConcatDataset, Dataset
 import wandb
