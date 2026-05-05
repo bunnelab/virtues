@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from typing import List, Tuple
 
-from modules.multiplex_virtues import MultiplexVirtues
+from virtues.modules.multiplex_virtues import MultiplexVirtues
 
 
 def _get_uniform_crops(img, stride, crop_size=128):

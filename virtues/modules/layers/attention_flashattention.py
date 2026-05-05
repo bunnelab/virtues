@@ -5,7 +5,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-from modules.layers.positional_embeddings import (
+from virtues.modules.layers.positional_embeddings import (
     PositionalEmbedding2D, LearnablePositionalEmbedding2D, RotaryPositionalEmbedding2D
 )
 

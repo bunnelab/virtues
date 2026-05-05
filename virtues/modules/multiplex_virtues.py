@@ -1,14 +1,14 @@
 import torch
 from torch import nn
 from loguru import logger
-from modules.layers.transformers_flashattention import MarkerAttentionEncoderBlock, ChannelAttentionEncoderBlock, FullAttentionEncoderBlock, PatchAttentionBlock
-from modules.layers.mask_utils_flashattention import build_self_attention_bias, build_self_attention_bias_channel_concat, SELF_ATTENTION_BIAS_CACHE
-from modules.layers.positional_embeddings import LearnablePositionalEmbedding2D, PositionalEmbedding2D, RotaryPositionalEmbedding2D
+from virtues.modules.layers.transformers_flashattention import MarkerAttentionEncoderBlock, ChannelAttentionEncoderBlock, FullAttentionEncoderBlock, PatchAttentionBlock
+from virtues.modules.layers.mask_utils_flashattention import build_self_attention_bias, build_self_attention_bias_channel_concat, SELF_ATTENTION_BIAS_CACHE
+from virtues.modules.layers.positional_embeddings import LearnablePositionalEmbedding2D, PositionalEmbedding2D, RotaryPositionalEmbedding2D
 from einops import rearrange
 from itertools import groupby 
 from typing import Iterator, Optional, List, Tuple, Dict, Any, overload
 from dataclasses import dataclass
-from modules.layers.basic_modules import build_activation
+from virtues.modules.layers.basic_modules import build_activation
 
 @dataclass
 class MultiplexEncoderOutput:
@@ -567,7 +567,7 @@ class MultiplexVirtues(nn.Module):
         
             
     def _set_default_config(self):
-        from modules.configs.default_multiplex_config import DEFAULT_MULTIPLEX_CONFIG
+        from virtues.modules.configs.default_multiplex_config import DEFAULT_MULTIPLEX_CONFIG
         for key, value in DEFAULT_MULTIPLEX_CONFIG.items():
             if self.config_params.get(key) is None:
                 self.config_params[key] = value

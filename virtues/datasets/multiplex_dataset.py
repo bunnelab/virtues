@@ -4,9 +4,9 @@ import random
 import pandas as pd
 from torch.utils.data import Dataset
 from torchvision.transforms import v2
-from datasets.augmentations import MultiplexRandomCrop, MultiplexRandomSymmetry, ChannelDropout
-from utils.utils import load_marker_embedding_dict
-from utils.masking import generate_mask
+from virtues.datasets.augmentations import MultiplexRandomCrop, MultiplexRandomSymmetry, ChannelDropout
+from virtues.utils.utils import load_marker_embedding_dict
+from virtues.utils.masking import generate_mask
 from typing import Tuple
 import math
 
