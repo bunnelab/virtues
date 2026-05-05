@@ -13,9 +13,18 @@ Spatial proteomics technologies have transformed our understanding of complex ti
 </p>
 
 ## Installation
+You can download the repo via:
+```
+git clone https://github.com/bunnelab/virtues.git
+```
 To create a new conda environment `virtues` with Python 3.12 and install all requirements run:
 ```
 source setup.sh
+```
+If you want to use VirTues within another project, you can install it as a library via
+```
+cd /local/path/to/repository/
+pip install -e .
 ```
 
 ## Getting Started
