@@ -4,7 +4,6 @@ metadata/
 expt/
 downstream_expt/
 rcp_scripts/
-*.pt
 wandb/
 legacy/
 logs/
