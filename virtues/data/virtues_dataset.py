@@ -43,7 +43,7 @@ class VirTuesPretrainingDataset(Dataset):
             tissue_metadata = tissue_metadata[tissue_metadata['split'] == split]
         tissue_ids = tissue_metadata.index.values
         for tissue_id in tissue_ids:
-            tile_coords = self.multiplex_dataset.tile_coordinates[tissue_id] # list of (row, col) tuples
+            tile_coords = self.multiplex_dataset.tile_coordinates.get(tissue_id, []) # list of (row, col) tuples
             for row, col in tile_coords:
                 self.tiles.append(({'tissue_id': tissue_id, 'row': row, 'col': col}))
         self.tiles = pd.DataFrame(self.tiles)
@@ -60,7 +60,7 @@ class VirTuesPretrainingDataset(Dataset):
         tissue_id = tile['tissue_id']
         row, col = tile['row'], tile['col']
         tissue = self.multiplex_dataset.get_tile_by_coordinates(tissue_id=tissue_id, row=row, col=col, preprocess=True, kind='uniprot_filtered')
-        img = tissue.tissue
+        img = tissue.image
         uniprots = tissue.uniprot_ids
         marker_indices = torch.tensor([self.marker_embedding_dict[uniprot] for uniprot in uniprots], dtype=torch.long)
 
