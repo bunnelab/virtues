@@ -115,7 +115,7 @@ To help you start using a trained VirTues model for downstream analyses, the `no
 -  `1_demo_reconstruction.ipynb` – Shows how to use VirTues to reconstruct partially masked channels or inpaint fully masked ones.
 - `2_demo_cell_phenotyping.ipynb`  – Demonstrates how to compute cell tokens with VirTues, which can be used for applications such as cell phenotyping and virtual biomarker discovery.
 
-These demonstration notebooks run on a standard desktop computer equipped with a modern GPU in less than 5 minutes.
+These demonstration notebooks run on a standard desktop computer equipped with a modern GPU in under five minutes.
 
 ## License and Terms of Use
 
