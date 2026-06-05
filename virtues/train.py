@@ -81,7 +81,7 @@ def build_datasets(conf, split: str) -> Dataset:
             standardization=ds_conf.standardization,
             resolution=ds_conf.resolution,
             tile_size=conf.data.tile_size,
-            disable_quantile_mask=False,
+            disable_quantile_mask=True,
             filter_list=['gaussian_blur',],
             use_mean_std=True,
         )
@@ -168,7 +168,8 @@ def train_virtues(conf):
         data_collator=custom_collate_fn,
     )
 
-    trainer.train()
+    resume_from_checkpoint = os.path.exists(os.path.join(conf.experiments_dir, conf.experiment.name, 'checkpoints')) and len(os.listdir(os.path.join(conf.experiments_dir, conf.experiment.name, 'checkpoints'))) > 0
+    trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 
 
 if __name__ == "__main__":
