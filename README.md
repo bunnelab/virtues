@@ -21,6 +21,8 @@ To create a new conda environment `virtues` with Python 3.12 and install all req
 ```
 source setup.sh
 ```
+The installation process should take less than 10 minutes. For a definitive list of package versions VirTues has been tested on, please refer to `version_requirements.txt`.
+
 If you want to use VirTues within another project, you can install it as a library via
 ```
 cd /local/path/to/repository/
@@ -112,6 +114,8 @@ To help you start using a trained VirTues model for downstream analyses, the `no
 
 -  `1_demo_reconstruction.ipynb` – Shows how to use VirTues to reconstruct partially masked channels or inpaint fully masked ones.
 - `2_demo_cell_phenotyping.ipynb`  – Demonstrates how to compute cell tokens with VirTues, which can be used for applications such as cell phenotyping and virtual biomarker discovery.
+
+These demonstration notebooks run on a standard desktop computer equipped with a modern GPU in under five minutes.
 
 ## License and Terms of Use
 
