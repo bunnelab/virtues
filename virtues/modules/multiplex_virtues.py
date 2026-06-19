@@ -15,6 +15,7 @@ from dataclasses import dataclass
 class MultiplexEncoderOutput:
     encoded_multiplex: List[torch.Tensor]  # List of encoded multiplex tensors, one per input multiplex
     patch_summary_tokens: List[torch.Tensor]  # List of patch summary tokens, one per input multiplex
+    intermediate_representations: Optional[Dict[int, torch.Tensor]] = None  # Optional dictionary of intermediate representations, keyed by layer index
 
 @dataclass 
 class MultiplexDecoderOutput:
@@ -157,6 +158,7 @@ class MultiplexVirtuesEncoder(nn.Module):
     def forward_list(self, multiplex: List[torch.Tensor],
                      channel_ids: List[torch.Tensor],
                      multiplex_mask: Optional[List[torch.Tensor]] = None,
+                     return_intermediate_layers: Optional[List[int]] = []
     ) -> MultiplexEncoderOutput:
         B = len(multiplex)
         h, w = multiplex[0].shape[-2], multiplex[0].shape[-1]
@@ -245,8 +247,8 @@ class MultiplexVirtuesEncoder(nn.Module):
         if self.positional_embedding is not None:
             x = self.positional_embedding(x, pos_multiplex)  # (sum_C + num_registers + 1) (H W) D
 
-        
-        for layer in self.encoder:
+        intermediate_representations = {}
+        for i, layer in enumerate(self.encoder):
             if multiplex_mask is None:
                 layer_output = layer.forward_cc(x,
                                                 pos_multiplex,
@@ -260,6 +262,10 @@ class MultiplexVirtuesEncoder(nn.Module):
                     x_channels_per_sample,
                 ) # pyright: ignore[reportCallIssue]
                 x = layer_output
+            if i + 1 in return_intermediate_layers:
+                x_intermediate = x.clone().detach()
+                x_intermediate = torch.split(x_intermediate, x_channels_per_sample, dim=0)  # List[(C_i + num_registers + 1) (H W) D]
+                intermediate_representations[i + 1] = torch.stack([x_i[0] for x_i in x_intermediate], dim=0)  # (B) (H W) D
 
         if self.norm_after_encoder_decoder:
             x = self.layer_norm(x)
@@ -273,6 +279,7 @@ class MultiplexVirtuesEncoder(nn.Module):
         return MultiplexEncoderOutput(
             encoded_multiplex=x,
             patch_summary_tokens=ps,
+            intermediate_representations=intermediate_representations
         )
     
 
