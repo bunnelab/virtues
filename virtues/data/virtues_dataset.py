@@ -71,6 +71,10 @@ class VirTuesPretrainingDataset(Dataset):
         C = img.shape[0]
         H = img.shape[1] // self.patch_size
         W = img.shape[2] // self.patch_size
+
+        if img.shape[1] != 128 or img.shape[2] != 128:
+            raise ValueError(f"Expected H and W to be 128, but got H={img.shape[1]} and W={img.shape[2]}. Check the tile size and patch size of {tissue_id}, {row}, {col}, {idx}.")
+
         mask = generate_mask(C, H, W, self.masking_ratio)
         return img, marker_indices, mask
 
