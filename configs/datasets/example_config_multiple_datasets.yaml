@@ -1,21 +1,13 @@
 datasets:
   example_dataset_1:
-    tissue_dir: assets/example_dataset/images
-    crop_dir: assets/example_dataset/crops
-    mask_dir: assets/example_dataset/masks
-    tissue_index: assets/example_dataset/tissue_index.csv
-    crop_index: assets/example_dataset/crop_index.csv
-    channels_file: assets/example_dataset/channels.csv
-    quantiles_file: assets/example_dataset/quantiles.csv
-    means_file: assets/example_dataset/means.csv
-    stds_file: assets/example_dataset/stds.csv
-  example_dataset_2: # Identical to example_dataset_1 for demonstration
-    tissue_dir: assets/example_dataset/images
-    crop_dir: assets/example_dataset/crops
-    mask_dir: assets/example_dataset/masks
-    tissue_index: assets/example_dataset/tissue_index.csv
-    crop_index: assets/example_dataset/crop_index.csv
-    channels_file: assets/example_dataset/channels.csv
-    quantiles_file: assets/example_dataset/quantiles.csv
-    means_file: assets/example_dataset/means.csv
-    stds_file: assets/example_dataset/stds.csv
+    name: cords2024cancer
+    path: assets/example_dataset/cords2024cancer
+    modality: imc
+    standardization: quantile_clipping_log1p/uq_0.99_image
+    resolution: 1.0
+  example_dataset_2:
+    name: cords2024cancer
+    path: /path/to/datasets/cords2024cancer
+    modality: imc
+    standardization: quantile_clipping_log1p/uq_0.99_image
+    resolution: 1.0

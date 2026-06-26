@@ -1,0 +1,659 @@
+{
+  "attributes": {
+    "ome": {
+      "version": "0.5",
+      "multiscales": [
+        {
+          "name": "cords2024cancer_ocmzljpb_0001",
+          "axes": [
+            {
+              "name": "c",
+              "type": "channel"
+            },
+            {
+              "name": "y",
+              "type": "space",
+              "unit": "micrometer"
+            },
+            {
+              "name": "x",
+              "type": "space",
+              "unit": "micrometer"
+            }
+          ],
+          "datasets": [
+            {
+              "path": "0",
+              "coordinateTransformations": [
+                {
+                  "type": "scale",
+                  "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "omero": {
+        "id": 1,
+        "name": "cords2024cancer_ocmzljpb_0001",
+        "version": "0.5",
+        "channels": [
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF0000",
+            "family": "linear",
+            "inverted": false,
+            "label": "MPO",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "S100",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "0000FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "SMA",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "H3",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF00FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "FAP",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "HLA-DR",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD146",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFA500",
+            "family": "linear",
+            "inverted": false,
+            "label": "CDH11",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF0000",
+            "family": "linear",
+            "inverted": false,
+            "label": "CA9",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "Collagen I",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "0000FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "VCAM1",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD20",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF00FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD68",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "IDO",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD3e",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFA500",
+            "family": "linear",
+            "inverted": false,
+            "label": "PDN",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF0000",
+            "family": "linear",
+            "inverted": false,
+            "label": "MMP11",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "PD-1",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "0000FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD73",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "MMP9",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF00FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "p75",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "TCF1/TCF7",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD10",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFA500",
+            "family": "linear",
+            "inverted": false,
+            "label": "VIM",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF0000",
+            "family": "linear",
+            "inverted": false,
+            "label": "FOXP3",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD45RA",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "0000FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "PNAd",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD8",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF00FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD248",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "LYVE-1",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "PDGFRB",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFA500",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD34",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF0000",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD4",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "vWF",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "0000FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "CXCL12",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "CCL21",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF00FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "panCK",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "CDH6",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFFFFF",
+            "family": "linear",
+            "inverted": false,
+            "label": "Iridium",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FFA500",
+            "family": "linear",
+            "inverted": false,
+            "label": "Iridium (V2)",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "FF0000",
+            "family": "linear",
+            "inverted": false,
+            "label": "Ki-67",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "00FF00",
+            "family": "linear",
+            "inverted": false,
+            "label": "CAV1",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          },
+          {
+            "active": true,
+            "coefficient": 1.0,
+            "color": "0000FF",
+            "family": "linear",
+            "inverted": false,
+            "label": "CD15",
+            "window": {
+              "start": 0.0,
+              "end": 255.0,
+              "min": 0.0,
+              "max": 255.0
+            }
+          }
+        ],
+        "rdefs": {
+          "model": "color",
+          "defaultT": 0,
+          "defaultZ": 0
+        }
+      }
+    }
+  },
+  "zarr_format": 3,
+  "node_type": "group"
+}

@@ -11,6 +11,11 @@ test_scripts/
 imcdatasets/
 protein_encodings/
 
+hf_upload.ipynb
+licences
+
+configs/test_config.yaml
+
 assets/checkpoints/*
 
 # Byte-compiled / optimized / DLL files

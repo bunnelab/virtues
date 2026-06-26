@@ -23,4 +23,5 @@ conda run -n virtues pip install POT
 conda run -n virtues pip install loguru
 conda run -n virtues pip install omegaconf
 conda run -n virtues pip install fair-esm
-conda run -n virtues pip install instanseg
+conda run -n virtues pip install instanseg-torch
+conda run -n virtues pip install https://github.com/bunnelab/spora-io.git

@@ -4,7 +4,10 @@ from contextlib import nullcontext
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from einops import rearrange
+from instanseg.utils.loss.instanseg_loss import InstanSeg as InstanceProcessor
+from instanseg.utils.tiling import _chops, _tiles_from_chops, _stitch_mean
 
 
 class Conv2DBlock(nn.Module):
@@ -128,7 +131,7 @@ class VirtuesTokenUNetDecoder(nn.Module):
         return self._forward_upsample(z0, z1, z2, z3, z4, self.decoder)
 
 
-class VirtuesFeatureUNet(nn.Module):
+class VirtuesSegmentationHead(nn.Module):
     def __init__(self, virtues_model, dim_out: int, num_celltypes=None, intermediate_layers=[4, 8, 12, 16]):
         super().__init__()
         self.virtues_model = virtues_model
@@ -140,6 +143,15 @@ class VirtuesFeatureUNet(nn.Module):
         self.num_celltypes = num_celltypes
         if num_celltypes is not None:
             self.decoder_phenotypes = VirtuesTokenUNetDecoder(embed_dim=model_dim, out_channels=num_celltypes)
+
+        self.instance_processor = InstanceProcessor(
+            device="cuda",
+            n_sigma=2,
+            cells_and_nuclei=False,
+            window_size=64,
+        )
+        self.instance_processor.initialize_pixel_classifier(self, MLP_width=5)
+        
 
     def _encode(self, mx_images, channels):
         amp_enabled = mx_images[0].device.type == "cuda"
@@ -163,3 +175,60 @@ class VirtuesFeatureUNet(nn.Module):
             out = torch.cat([out, phenotypes], dim=1)
 
         return out
+
+    @torch.no_grad()
+    def segment_tile(self, multiplex, channel_ids):
+        """
+        Computes cell segmentation and instance segmentation logits for the given multiplexed image and channel ids.
+        Args:
+            multiplex (torch.Tensor):A single multiplexed image to segment. The image should be of shape (C,H,W).
+            channel_ids (torch.Tensor): Channel ids corresponding to the channels in the multiplexed images. The tensor should be of shape (C,).
+        Returns:
+            pred_instance (torch.Tensor): The predicted instance segmentation mask. The tensor will be of shape (H,W) with integer values representing different instances.
+            semantic_logits (torch.Tensor): The predicted semantic segmentation logits. The tensor will be of shape (num_classes,H,W).
+        """
+        logits = self.forward([multiplex], [channel_ids])[0]
+        inst_logits = logits[: self.dim_out]
+        pred_instance = self.instance_processor.postprocessing(inst_logits, window_size=64, cleanup_fragments=True)[0]
+        semantic_logits = logits[self.dim_out:, :, :]
+        return pred_instance, semantic_logits
+    
+    @torch.no_grad()
+    def segment_tissue(self,
+                    multiplex_tissue,
+                    channel_ids,
+                    tile_size,
+                    overlap,
+                    batch_size,
+                    ):
+        """
+        Computes cell segmentation and instance segmentation logits for a large multiplexed tissue image by processing it in tiles.
+        """
+        h, w = int(multiplex_tissue.shape[-2]), int(multiplex_tissue.shape[-1])
+        tile_hw = (min(tile_size, h), min(tile_size, w))
+        chop_idx = _chops(multiplex_tissue.shape, shape=tile_hw, overlap=2 * overlap)
+        tiles = _tiles_from_chops(multiplex_tissue, shape=tile_hw, tuple_index=chop_idx)
+
+        logits_tiles = []
+
+        for i in range(0, len(tiles), batch_size):
+            image_batch = torch.stack(tiles[i : i + batch_size])
+            # with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=True):
+            pred = self.forward(image_batch, [channel_ids] * len(image_batch))
+
+            pred = pred.detach()
+            if pred.shape[-2:] != tile_hw:
+                pred = F.interpolate(pred, size=tile_hw, mode="bilinear", align_corners=False)
+            logits_tiles.extend([p for p in pred])
+
+        stitched_logits = _stitch_mean(
+            logits_tiles,
+            shape=tile_hw,
+            chop_list=chop_idx,
+            final_shape=(logits_tiles[0].shape[0], h, w),
+        )
+
+        inst_logits = stitched_logits[: self.dim_out]
+        pred_instance = self.instance_processor.postprocessing(inst_logits, window_size=64, cleanup_fragments=True)[0]
+        semantic_logits = stitched_logits[self.dim_out:, :, :]
+        return pred_instance, semantic_logits
