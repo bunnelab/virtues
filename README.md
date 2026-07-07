@@ -106,7 +106,7 @@ Below we list all VirTues model instances available on Hugging Face Hub includin
 | Model Name | Training Data |  Licence of Model Weights | Repository Path | Segmentation Head Available | 
 | --- | --- | --- | --- | --- | 
 | `virtues-sp32` | 32 spatial proteomics datasets (diverse technologies) | CC BY-NC 4.0 | `virtues-sp32/model.safetensors` | yes | 
-| `virtues-sp31` | 31 spatial proteomcis datasets (diverse technologies) | MIT Licence | `virtues-imc14/model.safetensors` | yes | 
+| `virtues-sp31` | 31 spatial proteomcis datasets (diverse technologies) | MIT Licence | `virtues-sp31/model.safetensors` | yes | 
 | `virtues-imc14` | 14 IMC datasets | CC BY-NC 4.0 | `virtues-imc14/model.safetensors` | no | 
 
 For instructions, how to download and load these model weights, please refer to the Demo notebooks below.
