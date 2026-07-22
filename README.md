@@ -59,7 +59,7 @@ All training datasets used in VirTues (except where licensing restrictions apply
 2. **[spora [io]](https://github.com/bunnelab/spora-io)** is a python data loading interface for easy and efficient access to the data once downloaded.
 3. **[spora [bench]](https://github.com/bunnelab/spora-bench)** is a benchmark suite for spatial proteomics foundation models.
 
-To download datasets from **spora [data]** please follow the instructions provided in the [documentation](https://spora.epfl.ch/docs-data.html#downloading)
+To download datasets from **spora [data]** please follow the instructions provided in the [documentation](https://spora.epfl.ch/docs-data.html#downloading).
 
 ### Setting up a new dataset not contained in spora
 
