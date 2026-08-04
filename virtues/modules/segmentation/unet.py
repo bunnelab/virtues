@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from contextlib import nullcontext
+from tqdm import tqdm
 
 import numpy as np
 import torch
@@ -8,6 +8,8 @@ import torch.nn.functional as F
 from einops import rearrange
 from instanseg.utils.loss.instanseg_loss import InstanSeg as InstanceProcessor
 from instanseg.utils.tiling import _chops, _tiles_from_chops, _stitch_mean
+
+from virtues.modules.segmentation.utils import segment_large_tissue
 
 
 class Conv2DBlock(nn.Module):
@@ -195,23 +197,53 @@ class VirtuesSegmentationHead(nn.Module):
     
     @torch.no_grad()
     def segment_tissue(self,
-                    multiplex_tissue,
-                    channel_ids,
-                    tile_size,
-                    overlap,
-                    batch_size,
+                    multiplex_tissue: torch.Tensor,
+                    channel_ids: torch.Tensor,
+                    tile_size: int,
+                    overlap: int,
+                    batch_size: int,
+                    large_tissue_threshold: int = 1500,
                     ):
         """
         Computes cell segmentation and instance segmentation logits for a large multiplexed tissue image by processing it in tiles.
+
+        If the tissue's longer side exceeds `large_tissue_threshold` pixels, delegates to
+        `segment_large_tissue` instead segments and stitches instances tile
+        by tile, at the cost of needing to match instance identities across tile borders.
+
+        Args:
+            multiplex_tissue (torch.Tensor): A large multiplexed tissue image to segment. The image should be of shape (C,H,W).
+            channel_ids (torch.Tensor): Channel ids corresponding to the channels in the multiplexed images. The tensor should be of shape (C,).
+            tile_size (int): The width/height of the tiles the image is split into.
+            overlap (int): The overlap (in pixels) between neighbouring tiles.
+            batch_size (int): The number of tiles processed per batch.
+            large_tissue_threshold (int, optional): If the tissue's longer side exceeds this threshold, delegates to `segment_large_tissue`. Defaults to 1500.
+        
+        Returns:
+            pred_instance (torch.Tensor): The predicted instance segmentation mask for the entire tissue. The tensor will be of shape (H,W) with integer values representing different instances.
+            semantic_logits (torch.Tensor): The predicted semantic segmentation logits for the entire tissue. The tensor will be of shape (num_classes,H,W).
         """
         h, w = int(multiplex_tissue.shape[-2]), int(multiplex_tissue.shape[-1])
+
+        if max(h, w) > large_tissue_threshold:
+            pred_instance, semantic_logits = segment_large_tissue(
+                multiplex_tissue,
+                self,
+                channel_ids,
+                tile=tile_size,
+                ovlp=overlap,
+                bs=batch_size,
+                device=str(multiplex_tissue.device),
+            )
+            return pred_instance.cpu(), semantic_logits.cpu()
+
         tile_hw = (min(tile_size, h), min(tile_size, w))
         chop_idx = _chops(multiplex_tissue.shape, shape=tile_hw, overlap=2 * overlap)
         tiles = _tiles_from_chops(multiplex_tissue, shape=tile_hw, tuple_index=chop_idx)
 
         logits_tiles = []
 
-        for i in range(0, len(tiles), batch_size):
+        for i in tqdm(range(0, len(tiles), batch_size)):
             image_batch = torch.stack(tiles[i : i + batch_size])
             # with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=True):
             pred = self.forward(image_batch, [channel_ids] * len(image_batch))
@@ -231,4 +263,4 @@ class VirtuesSegmentationHead(nn.Module):
         inst_logits = stitched_logits[: self.dim_out]
         pred_instance = self.instance_processor.postprocessing(inst_logits, window_size=64, cleanup_fragments=True)[0]
         semantic_logits = stitched_logits[self.dim_out:, :, :]
-        return pred_instance, semantic_logits
+        return pred_instance.cpu(), semantic_logits.cpu()
