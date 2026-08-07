@@ -1,6 +1,7 @@
-# VirTues: AI-powered virtual tissues from spatial proteomics for clinical diagnostics and biomedical discovery
+# VirTues: The Virtual Tissues foundation model resolves spatial proteomics across scales
 
-*[[Preprint]](https://arxiv.org/pdf/2501.06039), [[Supplement]](https://github.com/bunnelab/virtues/blob/main/.github/supplement.pdf), [[Model]](https://huggingface.co/bunnelab/virtues), 2025* 
+*Nature, 2026* <br>
+*[[Paper]](https://www.nature.com/articles/s41586-026-10884-y) | [[Model Weights]](https://huggingface.co/bunnelab/virtues) | [[Cite]](#reference)*
 
 <img src=".github/VirTues_logo.jpg" alt="VirTues Logo" width="40%" align="right" />
 
@@ -141,14 +142,14 @@ This repository and associated code are released under the MIT Licence. See `LIC
 Model weights are released under different licences due to restrictions of their respective training data. Please refer to the the section [Models](#models) for the respective licences.
 
 # Reference
-If you find our work useful in your research or if you use parts of this code please consider citing our [paper](https://arxiv.org/abs/2501.06039):
+If you find our work useful in your research or if you use parts of this code please consider citing our [paper](https://www.nature.com/articles/s41586-026-10884-y):
 
 ```
-@article{wenckstern2025ai,
-  title={{AI-powered virtual tissues from spatial proteomics for clinical diagnostics and biomedical discovery}},
-  author={Wenckstern, Johann and Jain, Eeshaan and Cheng, Yexiang and von Querfurth, Benedikt and Vasilev, Kiril and Pariset, Matteo and Cheng, Phil F. and Liakopoulos, Petros and Michielin, Olivier and Wicki, Andreas and Gut, Gabriele and Bunne, Charlotte},
-  journal={arXiv preprint arXiv:2501.06039},
-  year={2025},
-  url={https://arxiv.org/abs/2501.06039}, 
+@article{wenckstern2026virtual,
+  title = {{The Virtual Tissues foundation model resolves spatial proteomics across scales}},
+  author = {Wenckstern, Johann and Jain, Eeshaan and von Querfurth, Benedikt and Cheng, Yexiang and Vasilev, Kiril and Pariset, Matteo and Cheng, Phil F. and Liakopoulos, Petros and Michielin, Olivier and Wicki, Andreas and Gut, Gabriele and Bunne, Charlotte},
+  journal = {Nature},
+  publisher = {Nature Publishing Group},
+  year = {2026}
 }
 ```
