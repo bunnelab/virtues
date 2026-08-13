@@ -51,7 +51,7 @@ Alternatively, you can set these fields from the command line when starting the 
 
 # Datasets
 
-## Downloading existing datasets from spora
+## Downloading Existing Datasets from spora
 
 All training datasets used in VirTues (except where licensing restrictions apply) are accessible through **[spora](https://spora.epfl.ch/)**, a unified spatial proteomics ecosystem, developed in parallel with VirTues.
 
@@ -62,16 +62,16 @@ All training datasets used in VirTues (except where licensing restrictions apply
 
 To download datasets from **spora [data]** please follow the instructions provided in the [documentation](https://spora.epfl.ch/docs-data.html#downloading).
 
-### Setting up a new dataset not contained in spora
+### Setting up a New Dataset Not Contained in Spora
 
 VirTues can also be applied to datasets not (yet) contained in the official data corpus of spora. For this the datasets need to be locally converted to the dataset format of spora [data]. A detailed description of this format can found in the [documentation](https://spora.epfl.ch/docs-data.html#structure).
 
-## Dataset configuration
+## Dataset Configuration
 After setting up all datasets, you need to configure a `.yaml` file that specifies the paths to each dataset in order to train VirTues.
 
 For orientation and demonstration purposes, we provide an example dataset containing a single tissue in `assets/example_dataset`, along with corresponding configuration files located at `configs/datasets/example_config.yaml` and `configs/datasets/example_config_multiple_datasets.yaml`.
 
-## Marker embeddings
+## Marker Embeddings
 Finally, for every measured marker across all datasets, a marker embedding must be precomputed using ESM-2 and stored in the directory `marker_embedding_dir` specified by `configs/base_config.yaml` following the naming convention `[UniprotID].pt`.
 
 To faciliate this step, we provide two utility scripts:
