@@ -1,6 +1,7 @@
-# VirTues: AI-powered virtual tissues from spatial proteomics for clinical diagnostics and biomedical discovery
+# VirTues: The Virtual Tissues foundation model resolves spatial proteomics across scales
 
-*[[Preprint]](https://arxiv.org/pdf/2501.06039), [[Supplement]](https://github.com/bunnelab/virtues/blob/main/.github/supplement.pdf), [[Model]](https://huggingface.co/bunnelab/virtues), 2025* 
+*Nature, 2026* <br>
+*[[Paper]](https://www.nature.com/articles/s41586-026-10884-y) | [[Model Weights]](https://huggingface.co/bunnelab/virtues) | [[Cite]](#reference)*
 
 <img src=".github/VirTues_logo.jpg" alt="VirTues Logo" width="40%" align="right" />
 
@@ -50,7 +51,7 @@ Alternatively, you can set these fields from the command line when starting the 
 
 # Datasets
 
-## Downloading existing datasets from spora
+## Downloading Existing Datasets from spora
 
 All training datasets used in VirTues (except where licensing restrictions apply) are accessible through **[spora](https://spora.epfl.ch/)**, a unified spatial proteomics ecosystem, developed in parallel with VirTues.
 
@@ -61,16 +62,16 @@ All training datasets used in VirTues (except where licensing restrictions apply
 
 To download datasets from **spora [data]** please follow the instructions provided in the [documentation](https://spora.epfl.ch/docs-data.html#downloading).
 
-### Setting up a new dataset not contained in spora
+### Setting up a New Dataset Not Contained in Spora
 
 VirTues can also be applied to datasets not (yet) contained in the official data corpus of spora. For this the datasets need to be locally converted to the dataset format of spora [data]. A detailed description of this format can found in the [documentation](https://spora.epfl.ch/docs-data.html#structure).
 
-## Dataset configuration
+## Dataset Configuration
 After setting up all datasets, you need to configure a `.yaml` file that specifies the paths to each dataset in order to train VirTues.
 
 For orientation and demonstration purposes, we provide an example dataset containing a single tissue in `assets/example_dataset`, along with corresponding configuration files located at `configs/datasets/example_config.yaml` and `configs/datasets/example_config_multiple_datasets.yaml`.
 
-## Marker embeddings
+## Marker Embeddings
 Finally, for every measured marker across all datasets, a marker embedding must be precomputed using ESM-2 and stored in the directory `marker_embedding_dir` specified by `configs/base_config.yaml` following the naming convention `[UniprotID].pt`.
 
 To faciliate this step, we provide two utility scripts:
@@ -141,14 +142,14 @@ This repository and associated code are released under the MIT Licence. See `LIC
 Model weights are released under different licences due to restrictions of their respective training data. Please refer to the the section [Models](#models) for the respective licences.
 
 # Reference
-If you find our work useful in your research or if you use parts of this code please consider citing our [paper](https://arxiv.org/abs/2501.06039):
+If you find our work useful in your research or if you use parts of this code please consider citing our [paper](https://www.nature.com/articles/s41586-026-10884-y):
 
 ```
-@article{wenckstern2025ai,
-  title={{AI-powered virtual tissues from spatial proteomics for clinical diagnostics and biomedical discovery}},
-  author={Wenckstern, Johann and Jain, Eeshaan and Cheng, Yexiang and von Querfurth, Benedikt and Vasilev, Kiril and Pariset, Matteo and Cheng, Phil F. and Liakopoulos, Petros and Michielin, Olivier and Wicki, Andreas and Gut, Gabriele and Bunne, Charlotte},
-  journal={arXiv preprint arXiv:2501.06039},
-  year={2025},
-  url={https://arxiv.org/abs/2501.06039}, 
+@article{wenckstern2026virtual,
+  title = {{The Virtual Tissues foundation model resolves spatial proteomics across scales}},
+  author = {Wenckstern, Johann and Jain, Eeshaan and von Querfurth, Benedikt and Cheng, Yexiang and Vasilev, Kiril and Pariset, Matteo and Cheng, Phil F. and Liakopoulos, Petros and Michielin, Olivier and Wicki, Andreas and Gut, Gabriele and Bunne, Charlotte},
+  journal = {Nature},
+  publisher = {Nature Publishing Group},
+  year = {2026}
 }
 ```
