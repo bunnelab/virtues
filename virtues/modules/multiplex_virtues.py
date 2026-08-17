@@ -430,23 +430,6 @@ class MultiplexVirtuesDecoder(nn.Module):
             decoded_multiplex=multiplex,
         )
 
-        
-
-        
-
-
-
-                
-    
-
-
-                
-
-            
-
-
-
-
 
 
 
@@ -456,25 +439,24 @@ class MultiplexVirtues(nn.Module):
     VALID_PATTERN_BLOCKS = {'h', 'v', 'f', 'p'}
     VALID_PRIOR_BIAS_EMBEDDING_FUSION_TYPES = {'add', 'cross-attn'}
     VALID_POSITIONAL_EMBEDDING_TYPES = {'learnable', 'absolute_beginning', 'rope'}
+
     def __init__(self,
-                 use_default_config: bool,
-                 custom_config: Dict[str, Any] | None = None,
-                 prior_bias_embeddings: torch.Tensor | None = None,
-                 prior_bias_embedding_type: str | None = None ,
-                 patch_size: int | None = None ,
-                 model_dim: int | None = None ,
-                 feedforward_dim: int | None = None ,
-                 encoder_pattern: str | None = None ,
-                 num_encoder_heads: int | None = None ,
-                 decoder_pattern: str | None = None ,
-                 num_decoder_heads: int | None = None ,
-                 num_hidden_layers: int | None = None ,
-                 positional_embedding_type: str | None = None ,
-                 dropout: float | None = None ,
-                 group_layers: float | None = None ,
-                 norm_after_encoder_decoder: bool | None = None,
-                 verbose: bool = True,
-                 prior_bias_embedding_fusion_type: str | None = 'add',
+                 prior_bias_embeddings: torch.Tensor,
+                 prior_bias_embedding_type: str = 'esm' ,
+                 prior_bias_embedding_fusion_type: str = 'add',
+                 patch_size: int = 8 ,
+                 model_dim: int = 512 ,
+                 feedforward_dim: int = 1024 ,
+                 encoder_pattern: str = 'hvhvhvhvhvhvhvhv' ,
+                 num_encoder_heads: int = 8 ,
+                 decoder_pattern: str = 'ffff' ,
+                 num_decoder_heads: int = 8 ,
+                 num_hidden_layers: int = 0 ,
+                 positional_embedding_type: str = 'rope' ,
+                 dropout: float = 0.0 ,
+                 group_layers: float = False ,
+                 norm_after_encoder_decoder: bool = True,
+                 verbose: bool = False,
                  **kwargs: Any):
         """
         Used kwargs:
@@ -506,14 +488,6 @@ class MultiplexVirtues(nn.Module):
             **kwargs
         }
 
-        if use_default_config:
-            self._set_default_config()
-        elif custom_config is not None:
-            for key, value in custom_config.items():
-                if key in self.config_params:
-                    self.config_params[key] = value
-                else:
-                    raise ValueError(f"Unknown configuration key: {key}")
         self._check_config_params()
     
 
@@ -568,19 +542,6 @@ class MultiplexVirtues(nn.Module):
             patch_summary=encoder_output.patch_summary_tokens,
             channel_token_embeddings=encoder_output.encoded_multiplex
         )
-
-
-
-
-        
-            
-    def _set_default_config(self):
-        from virtues.modules.configs.default_multiplex_config import DEFAULT_MULTIPLEX_CONFIG
-        for key, value in DEFAULT_MULTIPLEX_CONFIG.items():
-            if self.config_params.get(key) is None:
-                self.config_params[key] = value
-                if self.verbose:
-                    print(f"Setting default for {key}: {value}")
 
     def _check_config_params(self):
         assert self.config_params['prior_bias_embedding_type'] in self.VALID_PRIOR_BIAS_EMBEDDING_TYPES, f"prior_bias_embedding_type must be one of {self.VALID_PRIOR_BIAS_EMBEDDING_TYPES}"

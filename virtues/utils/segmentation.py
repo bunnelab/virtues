@@ -12,13 +12,18 @@ def remove_small_cells(prediction: torch.Tensor | np.ndarray, min_cell_size: int
     return relabelled.astype(np.int32)
 
 def assign_cell_types(instance_prediction: np.ndarray, semantic_prediction: np.ndarray) -> np.ndarray:
-    cell_types = np.zeros_like(instance_prediction, dtype=np.int32)
-    for cell_id in np.unique(instance_prediction):
-        if cell_id == 0:
-            continue
-        mask = instance_prediction == cell_id
-        if np.sum(mask) == 0:
-            continue
-        cell_type = np.bincount(semantic_prediction[mask]).argmax()
-        cell_types[mask] = cell_type
-    return cell_types
+    inst = instance_prediction.ravel()
+    sem = semantic_prediction.ravel().astype(np.intp)
+
+    ids, inv = np.unique(inst, return_inverse=True)
+    inv = inv.ravel()
+    n_types = int(sem.max()) + 1 if sem.size else 1
+
+    # counts[i, t] = number of pixels of instance ids[i] with semantic label t
+    counts = np.bincount(inv * n_types + sem, minlength=ids.size * n_types)
+    counts = counts.reshape(ids.size, n_types)
+
+    types_per_id = counts.argmax(axis=1).astype(np.int32)
+    types_per_id[ids == 0] = 0
+
+    return types_per_id[inv].reshape(instance_prediction.shape)
