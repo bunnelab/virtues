@@ -19,17 +19,24 @@ You can download the repository via:
 ```
 git clone https://github.com/bunnelab/virtues.git
 ```
+
+To create a new conda environment `virtues` with Python 3.12 and install all requirements run:
+```
+source setup.sh
+```
+Afterwards activate the environment via:
+```
+conda activate virtues
+```
+The installation process should take less than 10 minutes. For a definitive list of package versions VirTues has been tested on, please refer to `version_requirements.txt`.
+
 To facilitate imports, we recommend installing VirTues as a library via:
 ```
 cd /local/path/to/repository/
 pip install -e .
 ```
 
-To create a new conda environment `virtues` with Python 3.12 and install all requirements run:
-```
-source setup.sh
-```
-The installation process should take less than 10 minutes. For a definitive list of package versions VirTues has been tested on, please refer to `version_requirements.txt`.
+
 
 
 # Configuration & Setup
