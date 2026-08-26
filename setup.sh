@@ -10,6 +10,7 @@ conda run -n virtues pip install biopython
 conda run -n virtues pip3 install -U scikit-learn
 conda run -n virtues pip install -U matplotlib
 conda run -n virtues pip install seaborn
+conda run -n virtues pip install psutil
 conda run -n virtues pip install flash-attn --no-build-isolation
 conda run -n virtues pip install wandb
 conda run -n virtues pip install pillow
