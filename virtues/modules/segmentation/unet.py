@@ -261,6 +261,6 @@ class VirtuesSegmentationHead(nn.Module):
         )
 
         inst_logits = stitched_logits[: self.dim_out]
-        pred_instance = self.instance_processor.postprocessing(inst_logits, window_size=64, cleanup_fragments=True)[0]
+        pred_instance = self.instance_processor.postprocessing(inst_logits, window_size=64, cleanup_fragments=True, max_seeds=20000)[0]
         semantic_logits = stitched_logits[self.dim_out:, :, :]
         return pred_instance.cpu(), semantic_logits.cpu()
