@@ -132,13 +132,16 @@ To help you start using a trained VirTues model for downstream analyses, the `no
 These demonstration notebooks run on a standard desktop computer equipped with a modern GPU in under five minutes.
 
 ## Further Resources and Benchmarks
-The benchmark library [**spora-bench**](https://github.com/bunnelab/spora-bench) contains further ready-to-run benchmarks for VirTues, in particular:
-* An end-to-end linear-probe-based phenotyping pipeline — `spora_bench.benchmarks.run_cell_level_tasks`
-* A pipeline for computing cell tokens across an entire dataset — `spora_bench.tools.compute_cell_tokens`
-* An ABMIL-based tissue-level classification pipeline — `spora_bench.benchmarks.run_tissue_level_tasks`
-* A standardized virtual staining benchmark — `spora_bench.benchmarks.run_virtual_staining_tasks`
+The benchmark library [**spora [bench]**](https://github.com/bunnelab/spora-bench) contains further ready-to-run pipelines and benchmarks for VirTues, in particular:
+* A pipeline for computing cell tokens across an entire dataset — `spora_bench/tools/compute_cell_tokens`
+* A linear-probe-based in-cohort phenotyping benchmark — `spora_bench/benchmarks/run_cell_probe_tasks`
+* A cross-cohort cell instance segmentation benchmark - `spora_bench/benchmarks/run_segmentation_tasks`
+* A cross-cohort cell type annotation benchmark - `spora_bench/benchmarks/run_cell_annotation_tasks`
+* An ABMIL-based tissue-level classification benchmark — `spora_bench/benchmarks/run_tissue_level_tasks`
+* A standardized multiplex-to-multiplex virtual staining benchmark — `spora_bench/benchmarks/run_mpx_virtual_staining_tasks`
+* A standardized H&E-to-multiplex virtual staining benchmark — `spora_bench/benchmarks/run_he_virtual_staining_tasks`
 
-Please refer to the repository of spora-bench for more details.
+Please refer to the repository of [spora [bench]](https://github.com/bunnelab/spora-bench) for more details.
 
 # License and Terms of Use
 
