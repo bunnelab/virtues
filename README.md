@@ -3,7 +3,7 @@
 *Nature, 2026* <br>
 *[[Paper]](https://www.nature.com/articles/s41586-026-10884-y) | [[Model Weights]](https://huggingface.co/bunnelab/virtues) | [[Cite]](#reference)*
 
-<img src=".github/VirTues_logo.jpg" alt="VirTues Logo" width="40%" align="right" />
+<img src=".github/VirTues_logo.png" alt="VirTues Logo" width="40%" align="right" />
 
 *Authors:* Johann Wenckstern*, Eeshaan Jain*, Benedikt von Querfurth*, Yexiang Cheng*, Kiril Vasilev, Matteo Pariset, Phil F. Cheng, Petros Liakopoulos, Olivier Michielin, Andreas Wicki, Gabriele Gut, Charlotte Bunne
 
