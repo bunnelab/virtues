@@ -12,6 +12,8 @@ protein_encodings/
 
 hf_upload.ipynb
 licences
+convert_weights.py
+convert.sh
 
 configs/test_config.yaml
 
