@@ -63,15 +63,16 @@ Alternatively, you can set these fields from the command line when starting the 
 All training datasets used in VirTues (except where licensing restrictions apply) are accessible through **[spora](https://spora.epfl.ch/)**, a unified spatial proteomics ecosystem, developed in parallel with VirTues.
 
 **spora** consists of three components:
-1. **[spora [data]](https://spora.epfl.ch/datasets.html)** is a curated collection of over 31 spatial proteomics datasets, all following a harmonized data format using state-of-the-art file formats optimized for machine learning. The available datasets can be browsed [here](https://spora.epfl.ch/datasets.html).
+1. **[spora [data]](https://spora.bioimagearchive.org/projects/spora)** is a curated collection of over 31 spatial proteomics datasets, all following a harmonized data format using state-of-the-art file formats optimized for machine learning. The available datasets can be browsed [here](https://spora.bioimagearchive.org/bioimage-archive/projects/spora/dataset).
 2. **[spora [io]](https://github.com/bunnelab/spora-io)** is a python data loading interface for easy and efficient access to the data once downloaded.
 3. **[spora [bench]](https://github.com/bunnelab/spora-bench)** is a benchmark suite for spatial proteomics foundation models.
 
-To download datasets from **spora [data]** please follow the instructions provided in the [documentation](https://spora.epfl.ch/docs-data.html#downloading).
+To downloads datasets of **spora [data]**, visit the [dataset browser](https://spora.bioimagearchive.org/bioimage-archive/projects/spora/dataset), select your dataset, click download and execute the shown `rclone` command.
+
 
 ### Setting up a New Dataset Not Contained in Spora
 
-VirTues can also be applied to datasets not (yet) contained in the official data corpus of spora. For this the datasets need to be locally converted to the dataset format of spora [data]. A detailed description of this format can found in the [documentation](https://spora.epfl.ch/docs-data.html#structure).
+VirTues can also be applied to datasets not (yet) contained in the official data corpus of spora. For this the datasets need to be locally converted to the dataset format of spora [data]. A detailed description of this format can found in the [documentation](https://spora.epfl.ch/docs/io/convert.html).
 
 ## Dataset Configuration
 After setting up all datasets, you need to configure a `.yaml` file that specifies the paths to each dataset in order to train VirTues.
